@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ReactNode } from "react";
+import { climatiqEnabled } from "@/lib/climatiq";
 
 const sections = [
   {
@@ -53,13 +54,18 @@ export function AppShell({
   activePath,
   title,
   subtitle,
+  tabs,
   children,
 }: {
   activePath: string;
   title: string;
   subtitle: string;
+  tabs?: { label: string; count?: number; active?: boolean }[];
   children: ReactNode;
 }) {
+  const activeSection = sections.find((s) => activePath.startsWith(s.href));
+  const hasClimatiq = climatiqEnabled();
+
   return (
     <main className="saas-shell">
       <aside className="saas-sidebar">
@@ -102,17 +108,62 @@ export function AppShell({
       </aside>
 
       <section className="saas-main">
-        <header className="saas-header">
-          <div>
-            <h2>{title}</h2>
-            <p>{subtitle}</p>
+        <div className="saas-topbar">
+          <div className="saas-breadcrumb">
+            Aster Materials
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6" /></svg>
+            <span>{activeSection?.label || "Dashboard"}</span>
           </div>
-          <div className="saas-header-pills">
-            <span>Audit-ready</span>
-            <span>Excel import</span>
+          <div className="saas-topbar-actions">
+            {hasClimatiq && (
+              <span className="climatiq-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+                Climatiq Live
+              </span>
+            )}
+            <span className="saas-topbar-badge">
+              <span className="dot" />
+              Audit-ready
+            </span>
+            <span className="saas-topbar-pill">FY 2025</span>
           </div>
-        </header>
-        {children}
+        </div>
+
+        <div className="saas-content">
+          <header className="saas-header">
+            <div>
+              <h2>{title}</h2>
+              <p>{subtitle}</p>
+            </div>
+            <div className="saas-header-actions">
+              {hasClimatiq && (
+                <span className="climatiq-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+                  Emission factors powered by Climatiq
+                </span>
+              )}
+            </div>
+          </header>
+
+          {tabs && tabs.length > 0 && (
+            <div className="workspace-tabs">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.label}
+                  className={`workspace-tab ${tab.active ? "active" : ""}`}
+                  type="button"
+                >
+                  {tab.label}
+                  {tab.count !== undefined && (
+                    <span className="tab-count">{tab.count}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {children}
+        </div>
       </section>
     </main>
   );
