@@ -1,13 +1,21 @@
 import {
   BenchmarkSignal,
   CompanyProfile,
+  DisclosureTheme,
   EmissionActivity,
   EvidenceRecord,
   Facility,
   FrameworkItem,
+  GovernanceRecord,
+  MaterialTopic,
+  MetricLibraryItem,
+  PeopleMetric,
   ReductionLever,
   ResourceMetric,
   ScenarioSettings,
+  SupplierRecord,
+  TargetProgram,
+  TaskItem,
   ValidationRule
 } from "@/lib/types";
 
@@ -18,7 +26,15 @@ export const companyProfile: CompanyProfile = {
   headquarters: "Mumbai, India",
   summary:
     "A production-grade ESG control room shaped from your workbook, but rebuilt as a modern climate-data product with auditability, reporting readiness, and decarbonization planning.",
-  frameworks: ["GHG Protocol", "BRSR", "CSRD / ESRS", "GRI 302/303/305/306"]
+  frameworks: [
+    "GHG Protocol",
+    "BRSR",
+    "CSRD / ESRS",
+    "GRI 302/303/305/306",
+    "SASB",
+    "TCFD / IFRS S2",
+    "CDP"
+  ]
 };
 
 export const facilities: Facility[] = [
@@ -746,3 +762,463 @@ export const defaultScenario: ScenarioSettings = {
   logisticsShift: 22,
   wasteCircularity: 45
 };
+
+export const metricLibrary: MetricLibraryItem[] = [
+  {
+    id: "ml-1",
+    pillar: "Environmental",
+    domain: "Climate",
+    name: "Scope 1 gross emissions",
+    unit: "tCO2e",
+    frameworks: ["GHG Protocol", "ESRS E1", "BRSR"],
+    owner: "Climate team",
+    status: "Collected",
+    assurance: "High"
+  },
+  {
+    id: "ml-2",
+    pillar: "Environmental",
+    domain: "Climate",
+    name: "Scope 2 market-based emissions",
+    unit: "tCO2e",
+    frameworks: ["GHG Protocol", "CDP", "IFRS S2"],
+    owner: "Energy team",
+    status: "Partial",
+    assurance: "Medium"
+  },
+  {
+    id: "ml-3",
+    pillar: "Environmental",
+    domain: "Climate",
+    name: "Scope 3 category coverage",
+    unit: "% categories assessed",
+    frameworks: ["GHG Protocol", "ESRS E1", "CDP"],
+    owner: "Supply chain",
+    status: "Partial",
+    assurance: "Medium"
+  },
+  {
+    id: "ml-4",
+    pillar: "Environmental",
+    domain: "Water",
+    name: "Water withdrawal by source",
+    unit: "m3",
+    frameworks: ["GRI 303", "ESRS E3", "BRSR"],
+    owner: "EHS",
+    status: "Collected",
+    assurance: "High"
+  },
+  {
+    id: "ml-5",
+    pillar: "Environmental",
+    domain: "Waste",
+    name: "Waste generated and diverted",
+    unit: "MT / %",
+    frameworks: ["GRI 306", "ESRS E5", "BRSR"],
+    owner: "EHS",
+    status: "Collected",
+    assurance: "Medium"
+  },
+  {
+    id: "ml-6",
+    pillar: "Environmental",
+    domain: "Air and energy",
+    name: "Energy consumption and renewable share",
+    unit: "kWh / %",
+    frameworks: ["GRI 302", "ESRS E1", "BRSR"],
+    owner: "Energy team",
+    status: "Collected",
+    assurance: "High"
+  },
+  {
+    id: "ml-7",
+    pillar: "Social",
+    domain: "Workforce",
+    name: "Total headcount and turnover",
+    unit: "Employees / %",
+    frameworks: ["ESRS S1", "SASB", "BRSR"],
+    owner: "HR",
+    status: "Collected",
+    assurance: "Medium"
+  },
+  {
+    id: "ml-8",
+    pillar: "Social",
+    domain: "Health and safety",
+    name: "LTIFR and fatalities",
+    unit: "Rate / count",
+    frameworks: ["GRI 403", "ESRS S1", "BRSR"],
+    owner: "Safety office",
+    status: "Collected",
+    assurance: "High"
+  },
+  {
+    id: "ml-9",
+    pillar: "Social",
+    domain: "Diversity and inclusion",
+    name: "Gender diversity in management",
+    unit: "%",
+    frameworks: ["ESRS S1", "BRSR", "SASB"],
+    owner: "HR",
+    status: "Partial",
+    assurance: "Medium"
+  },
+  {
+    id: "ml-10",
+    pillar: "Governance",
+    domain: "Governance",
+    name: "Board independence and ESG oversight",
+    unit: "% / narrative",
+    frameworks: ["ESRS G1", "BRSR", "SASB"],
+    owner: "Company secretary",
+    status: "Collected",
+    assurance: "High"
+  },
+  {
+    id: "ml-11",
+    pillar: "Governance",
+    domain: "Ethics and compliance",
+    name: "Anti-bribery training and incidents",
+    unit: "% / count",
+    frameworks: ["ESRS G1", "BRSR"],
+    owner: "Compliance",
+    status: "Partial",
+    assurance: "Medium"
+  },
+  {
+    id: "ml-12",
+    pillar: "Governance",
+    domain: "Cyber and data",
+    name: "Cybersecurity governance and incidents",
+    unit: "count / narrative",
+    frameworks: ["SASB", "IFRS S1", "ESRS G1"],
+    owner: "Security office",
+    status: "Gap",
+    assurance: "Low"
+  }
+];
+
+export const materialTopics: MaterialTopic[] = [
+  {
+    id: "mt-1",
+    pillar: "Environmental",
+    topic: "Climate mitigation",
+    impactLevel: "High",
+    stakeholderInterest: "High",
+    status: "Assessed"
+  },
+  {
+    id: "mt-2",
+    pillar: "Environmental",
+    topic: "Water stewardship",
+    impactLevel: "High",
+    stakeholderInterest: "Medium",
+    status: "Assessed"
+  },
+  {
+    id: "mt-3",
+    pillar: "Environmental",
+    topic: "Circularity and waste",
+    impactLevel: "Medium",
+    stakeholderInterest: "Medium",
+    status: "Refreshing"
+  },
+  {
+    id: "mt-4",
+    pillar: "Social",
+    topic: "Worker health and safety",
+    impactLevel: "High",
+    stakeholderInterest: "High",
+    status: "Assessed"
+  },
+  {
+    id: "mt-5",
+    pillar: "Social",
+    topic: "Diversity and inclusion",
+    impactLevel: "Medium",
+    stakeholderInterest: "High",
+    status: "Refreshing"
+  },
+  {
+    id: "mt-6",
+    pillar: "Governance",
+    topic: "Business ethics and compliance",
+    impactLevel: "High",
+    stakeholderInterest: "High",
+    status: "Pending"
+  }
+];
+
+export const supplierRecords: SupplierRecord[] = [
+  {
+    id: "sup-1",
+    name: "Shakti Steel Ltd.",
+    category: "Steel",
+    spendUsd: 1800000,
+    emissionsTonnes: 625,
+    responseRate: 88,
+    risk: "High",
+    status: "Primary data"
+  },
+  {
+    id: "sup-2",
+    name: "Nexa Aluminum",
+    category: "Aluminum",
+    spendUsd: 940000,
+    emissionsTonnes: 576,
+    responseRate: 54,
+    risk: "High",
+    status: "Escalated"
+  },
+  {
+    id: "sup-3",
+    name: "Polymer Axis",
+    category: "Polymers",
+    spendUsd: 420000,
+    emissionsTonnes: 176,
+    responseRate: 73,
+    risk: "Medium",
+    status: "Estimated"
+  },
+  {
+    id: "sup-4",
+    name: "EcoPack Industries",
+    category: "Packaging",
+    spendUsd: 160000,
+    emissionsTonnes: 22,
+    responseRate: 96,
+    risk: "Low",
+    status: "Primary data"
+  }
+];
+
+export const controlTasks: TaskItem[] = [
+  {
+    id: "task-1",
+    title: "Obtain primary factor for aluminum supplier",
+    assignee: "Strategic sourcing",
+    dueDate: "2025-05-12",
+    status: "Open",
+    priority: "P1",
+    framework: "ESRS E1"
+  },
+  {
+    id: "task-2",
+    title: "Approve wastewater discharge evidence",
+    assignee: "EHS manager",
+    dueDate: "2025-05-07",
+    status: "In review",
+    priority: "P2",
+    framework: "GRI 303"
+  },
+  {
+    id: "task-3",
+    title: "Refresh cybersecurity governance narrative",
+    assignee: "Security office",
+    dueDate: "2025-05-20",
+    status: "Blocked",
+    priority: "P2",
+    framework: "SASB"
+  },
+  {
+    id: "task-4",
+    title: "Finalize board ESG oversight disclosure",
+    assignee: "Company secretary",
+    dueDate: "2025-05-15",
+    status: "In review",
+    priority: "P1",
+    framework: "ESRS G1"
+  },
+  {
+    id: "task-5",
+    title: "Validate workforce diversity baseline",
+    assignee: "HR analytics",
+    dueDate: "2025-05-18",
+    status: "Open",
+    priority: "P2",
+    framework: "ESRS S1"
+  },
+  {
+    id: "task-6",
+    title: "Close missing landfill manifest gap",
+    assignee: "Facilities",
+    dueDate: "2025-05-05",
+    status: "Open",
+    priority: "P1",
+    framework: "GRI 306"
+  }
+];
+
+export const peopleMetrics: PeopleMetric[] = [
+  {
+    id: "pm-1",
+    label: "Total workforce",
+    category: "Workforce",
+    value: "1,248 employees",
+    owner: "HR operations",
+    status: "Strong",
+    benchmark: "Monthly HRIS sync"
+  },
+  {
+    id: "pm-2",
+    label: "Employee turnover",
+    category: "Workforce",
+    value: "11.4%",
+    owner: "HR analytics",
+    status: "Watch",
+    benchmark: "Target < 10%"
+  },
+  {
+    id: "pm-3",
+    label: "Women in management",
+    category: "Diversity",
+    value: "27%",
+    owner: "DEI office",
+    status: "Watch",
+    benchmark: "Target 35%"
+  },
+  {
+    id: "pm-4",
+    label: "LTIFR",
+    category: "Safety",
+    value: "0.62 per 200k hrs",
+    owner: "Safety office",
+    status: "Strong",
+    benchmark: "Below industry median"
+  }
+];
+
+export const governanceRecords: GovernanceRecord[] = [
+  {
+    id: "gov-1",
+    label: "Independent directors",
+    category: "Board",
+    value: "67%",
+    owner: "Company secretary",
+    status: "Strong",
+    framework: "ESRS G1"
+  },
+  {
+    id: "gov-2",
+    label: "ESG oversight at board level",
+    category: "Board",
+    value: "Audit and risk committee charter updated",
+    owner: "Company secretary",
+    status: "Strong",
+    framework: "BRSR"
+  },
+  {
+    id: "gov-3",
+    label: "Anti-bribery training completion",
+    category: "Compliance",
+    value: "91%",
+    owner: "Compliance office",
+    status: "Watch",
+    framework: "ESRS G1"
+  },
+  {
+    id: "gov-4",
+    label: "Confirmed cyber incidents",
+    category: "Cybersecurity",
+    value: "2 low-severity incidents",
+    owner: "Security office",
+    status: "Watch",
+    framework: "SASB"
+  }
+];
+
+export const disclosureThemes: DisclosureTheme[] = [
+  {
+    id: "dt-1",
+    theme: "Climate and energy",
+    pillar: "Environmental",
+    requirements: 18,
+    ready: 12,
+    needsEvidence: 3
+  },
+  {
+    id: "dt-2",
+    theme: "Water and effluents",
+    pillar: "Environmental",
+    requirements: 8,
+    ready: 6,
+    needsEvidence: 1
+  },
+  {
+    id: "dt-3",
+    theme: "Waste and circularity",
+    pillar: "Environmental",
+    requirements: 9,
+    ready: 5,
+    needsEvidence: 2
+  },
+  {
+    id: "dt-4",
+    theme: "Workforce and safety",
+    pillar: "Social",
+    requirements: 11,
+    ready: 7,
+    needsEvidence: 2
+  },
+  {
+    id: "dt-5",
+    theme: "Governance and ethics",
+    pillar: "Governance",
+    requirements: 10,
+    ready: 6,
+    needsEvidence: 3
+  }
+];
+
+export const targetPrograms: TargetProgram[] = [
+  {
+    id: "tp-1",
+    title: "Reduce Scope 1 and 2 emissions intensity",
+    pillar: "Environmental",
+    baseline: "0.092 tCO2e / MT",
+    target: "-42% by FY2030",
+    targetYear: "2030",
+    owner: "Climate team",
+    status: "On track"
+  },
+  {
+    id: "tp-2",
+    title: "Increase renewable electricity share",
+    pillar: "Environmental",
+    baseline: "17%",
+    target: "55% by FY2028",
+    targetYear: "2028",
+    owner: "Energy procurement",
+    status: "Needs funding"
+  },
+  {
+    id: "tp-3",
+    title: "Achieve >90% waste diversion",
+    pillar: "Environmental",
+    baseline: "73%",
+    target: "92% by FY2027",
+    targetYear: "2027",
+    owner: "EHS",
+    status: "At risk"
+  },
+  {
+    id: "tp-4",
+    title: "Raise women in management",
+    pillar: "Social",
+    baseline: "27%",
+    target: "35% by FY2028",
+    targetYear: "2028",
+    owner: "DEI office",
+    status: "Needs funding"
+  },
+  {
+    id: "tp-5",
+    title: "Reach 100% anti-bribery training coverage",
+    pillar: "Governance",
+    baseline: "91%",
+    target: "100% by FY2026",
+    targetYear: "2026",
+    owner: "Compliance office",
+    status: "On track"
+  }
+];

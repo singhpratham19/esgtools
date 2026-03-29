@@ -1,6 +1,7 @@
 export type Scope = "Scope 1" | "Scope 2" | "Scope 3";
 export type QualityState = "Verified" | "Needs review" | "Missing proof";
 export type HealthState = "Strong" | "Watch" | "Critical";
+export type Pillar = "Environmental" | "Social" | "Governance";
 export type ScenarioDriver =
   | "renewable-electricity"
   | "thermal-efficiency"
@@ -68,6 +69,7 @@ export interface EvidenceRecord {
   uploadedAt: string;
   documentType: string;
   status: QualityState;
+  filePath?: string;
 }
 
 export interface ValidationRule {
@@ -116,4 +118,86 @@ export interface ScenarioSettings {
   supplierPrograms: number;
   logisticsShift: number;
   wasteCircularity: number;
+}
+
+export interface MetricLibraryItem {
+  id: string;
+  pillar: Pillar;
+  domain: string;
+  name: string;
+  unit: string;
+  frameworks: string[];
+  owner: string;
+  status: "Collected" | "Partial" | "Gap";
+  assurance: "High" | "Medium" | "Low";
+}
+
+export interface MaterialTopic {
+  id: string;
+  pillar: Pillar;
+  topic: string;
+  impactLevel: "High" | "Medium" | "Low";
+  stakeholderInterest: "High" | "Medium" | "Low";
+  status: "Assessed" | "Refreshing" | "Pending";
+}
+
+export interface SupplierRecord {
+  id: string;
+  name: string;
+  category: string;
+  spendUsd: number;
+  emissionsTonnes: number;
+  responseRate: number;
+  risk: "Low" | "Medium" | "High";
+  status: "Primary data" | "Estimated" | "Escalated";
+}
+
+export interface TaskItem {
+  id: string;
+  title: string;
+  assignee: string;
+  dueDate: string;
+  status: "Open" | "In review" | "Done" | "Blocked";
+  priority: "P1" | "P2" | "P3";
+  framework: string;
+}
+
+export interface PeopleMetric {
+  id: string;
+  label: string;
+  category: string;
+  value: string;
+  owner: string;
+  status: HealthState;
+  benchmark: string;
+}
+
+export interface GovernanceRecord {
+  id: string;
+  label: string;
+  category: string;
+  value: string;
+  owner: string;
+  status: HealthState;
+  framework: string;
+}
+
+export interface DisclosureTheme {
+  id: string;
+  theme: string;
+  pillar: Pillar;
+  requirements: number;
+  ready: number;
+  needsEvidence: number;
+}
+
+export interface TargetProgram {
+  id: string;
+  title: string;
+  pillar: Pillar;
+  baseline: string;
+  target: string;
+  targetYear: string;
+  owner: string;
+  status: "On track" | "Needs funding" | "At risk";
 }

@@ -1,5 +1,5 @@
-import { ESGPlatform } from "@/components/esg-platform";
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  return <ESGPlatform />;
+  redirect("/program");
 }
