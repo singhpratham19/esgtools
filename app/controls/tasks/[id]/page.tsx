@@ -3,10 +3,16 @@ import { notFound } from "next/navigation";
 
 import { AppShell } from "@/components/platform/app-shell";
 import { TaskEditorForm } from "@/components/platform/forms";
+import { StatusBadge } from "@/components/platform/status-badge";
 import { getTask } from "@/lib/db";
 
-export default function TaskDetailPage({ params }: { params: { id: string } }) {
-  const task = getTask(params.id);
+export default async function TaskDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const task = getTask(id);
   if (!task) {
     notFound();
   }
@@ -34,11 +40,15 @@ export default function TaskDetailPage({ params }: { params: { id: string } }) {
               </div>
               <div>
                 <dt>Status</dt>
-                <dd>{task.status}</dd>
+                <dd><StatusBadge status={task.status} /></dd>
+              </div>
+              <div>
+                <dt>Priority</dt>
+                <dd><span className="pill">{task.priority}</span></dd>
               </div>
               <div>
                 <dt>Framework</dt>
-                <dd>{task.framework}</dd>
+                <dd><span className="pill">{task.framework}</span></dd>
               </div>
             </dl>
           </div>
@@ -47,7 +57,7 @@ export default function TaskDetailPage({ params }: { params: { id: string } }) {
           <TaskEditorForm task={task} />
           <div className="detail-card">
             <Link className="entity-link" href="/controls">
-              Back to controls
+              &larr; Back to controls
             </Link>
           </div>
         </div>

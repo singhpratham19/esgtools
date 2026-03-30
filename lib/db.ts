@@ -20,7 +20,10 @@ import {
   TaskItem
 } from "@/lib/types";
 
-const storageDir = path.join(process.cwd(), "storage");
+const isVercel = !!process.env.VERCEL;
+const storageDir = isVercel
+  ? path.join("/tmp", "esgtool-storage")
+  : path.join(process.cwd(), "storage");
 const dbPath = path.join(storageDir, "esgtool.sqlite");
 
 let database: Database.Database | null = null;

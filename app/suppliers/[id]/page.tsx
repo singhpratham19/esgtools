@@ -3,10 +3,17 @@ import { notFound } from "next/navigation";
 
 import { AppShell } from "@/components/platform/app-shell";
 import { SupplierEditorForm } from "@/components/platform/forms";
+import { StatusBadge } from "@/components/platform/status-badge";
 import { getSupplier } from "@/lib/db";
+import { formatTonnes } from "@/lib/esg";
 
-export default function SupplierDetailPage({ params }: { params: { id: string } }) {
-  const supplier = getSupplier(params.id);
+export default async function SupplierDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const supplier = getSupplier(id);
   if (!supplier) {
     notFound();
   }
@@ -30,11 +37,19 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
               </div>
               <div>
                 <dt>Risk</dt>
-                <dd>{supplier.risk}</dd>
+                <dd><StatusBadge status={supplier.risk} /></dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd><StatusBadge status={supplier.status} /></dd>
               </div>
               <div>
                 <dt>Spend</dt>
                 <dd>{`$${supplier.spendUsd.toLocaleString()}`}</dd>
+              </div>
+              <div>
+                <dt>Emissions</dt>
+                <dd>{formatTonnes(supplier.emissionsTonnes)}</dd>
               </div>
               <div>
                 <dt>Response rate</dt>
@@ -47,7 +62,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
           <SupplierEditorForm supplier={supplier} />
           <div className="detail-card">
             <Link className="entity-link" href="/suppliers">
-              Back to suppliers
+              &larr; Back to suppliers
             </Link>
           </div>
         </div>

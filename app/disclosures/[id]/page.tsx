@@ -3,10 +3,16 @@ import { notFound } from "next/navigation";
 
 import { AppShell } from "@/components/platform/app-shell";
 import { DisclosureEditorForm } from "@/components/platform/forms";
+import { StatusBadge } from "@/components/platform/status-badge";
 import { getDisclosure } from "@/lib/db";
 
-export default function DisclosureDetailPage({ params }: { params: { id: string } }) {
-  const disclosure = getDisclosure(params.id);
+export default async function DisclosureDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const disclosure = getDisclosure(id);
   if (!disclosure) {
     notFound();
   }
@@ -30,11 +36,11 @@ export default function DisclosureDetailPage({ params }: { params: { id: string 
               </div>
               <div>
                 <dt>Code</dt>
-                <dd>{disclosure.code}</dd>
+                <dd><span className="pill">{disclosure.code}</span></dd>
               </div>
               <div>
                 <dt>Status</dt>
-                <dd>{disclosure.status}</dd>
+                <dd><StatusBadge status={disclosure.status} /></dd>
               </div>
               <div>
                 <dt>Source</dt>
@@ -47,7 +53,7 @@ export default function DisclosureDetailPage({ params }: { params: { id: string 
           <DisclosureEditorForm disclosure={disclosure} />
           <div className="detail-card">
             <Link className="entity-link" href="/disclosures">
-              Back to disclosure binder
+              &larr; Back to disclosure binder
             </Link>
           </div>
         </div>

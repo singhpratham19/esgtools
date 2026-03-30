@@ -3,10 +3,16 @@ import { notFound } from "next/navigation";
 
 import { AppShell } from "@/components/platform/app-shell";
 import { TargetEditorForm } from "@/components/platform/forms";
+import { StatusBadge } from "@/components/platform/status-badge";
 import { getTarget } from "@/lib/db";
 
-export default function TargetDetailPage({ params }: { params: { id: string } }) {
-  const target = getTarget(params.id);
+export default async function TargetDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const target = getTarget(id);
   if (!target) {
     notFound();
   }
@@ -26,7 +32,11 @@ export default function TargetDetailPage({ params }: { params: { id: string } })
             <dl className="detail-grid">
               <div>
                 <dt>Pillar</dt>
-                <dd>{target.pillar}</dd>
+                <dd><span className="pill">{target.pillar}</span></dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd><StatusBadge status={target.status} /></dd>
               </div>
               <div>
                 <dt>Baseline</dt>
@@ -35,6 +45,10 @@ export default function TargetDetailPage({ params }: { params: { id: string } })
               <div>
                 <dt>Target</dt>
                 <dd>{target.target}</dd>
+              </div>
+              <div>
+                <dt>Target year</dt>
+                <dd>{target.targetYear}</dd>
               </div>
               <div>
                 <dt>Owner</dt>
@@ -47,7 +61,7 @@ export default function TargetDetailPage({ params }: { params: { id: string } })
           <TargetEditorForm target={target} />
           <div className="detail-card">
             <Link className="entity-link" href="/targets">
-              Back to targets
+              &larr; Back to targets
             </Link>
           </div>
         </div>
