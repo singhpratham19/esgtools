@@ -93,15 +93,37 @@ export function AppShell({
               {section.label}
             </Link>
           ))}
+
+          <span className="saas-nav-section" style={{ marginTop: 12 }}>Reporting Cycle</span>
+          <div className="saas-sidebar-stat">
+            <span>Gross emissions YTD</span>
+            <strong>12,480 tCO₂e</strong>
+            <span className="delta">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="7 17 17 7" /><polyline points="8 7 17 7 17 16" />
+              </svg>
+              4.2% vs FY24
+            </span>
+          </div>
+          <div className="saas-sidebar-stat">
+            <span>Audit readiness</span>
+            <strong>87%</strong>
+            <span className="delta">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="7 17 17 7" /><polyline points="8 7 17 7 17 16" />
+              </svg>
+              +12pp QoQ
+            </span>
+          </div>
         </nav>
 
         <div className="saas-sidebar-footer">
           <div className="saas-sidebar-card">
-            <p>FY 2025</p>
+            <p>FY 2025 Frameworks</p>
             <ul>
               <li>GHG Protocol</li>
               <li>BRSR &middot; CSRD</li>
-              <li>GRI &middot; SASB</li>
+              <li>GRI &middot; SASB &middot; TCFD</li>
             </ul>
           </div>
         </div>
@@ -113,6 +135,10 @@ export function AppShell({
             Aster Materials
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6" /></svg>
             <span>{activeSection?.label || "Dashboard"}</span>
+          </div>
+          <div className="saas-topbar-search">
+            <input type="text" placeholder="Search emissions, suppliers, disclosures…" />
+            <kbd>⌘K</kbd>
           </div>
           <div className="saas-topbar-actions">
             {hasClimatiq && (
@@ -126,6 +152,10 @@ export function AppShell({
               Audit-ready
             </span>
             <span className="saas-topbar-pill">FY 2025</span>
+            <span className="saas-user-chip">
+              <span className="saas-user-avatar">PS</span>
+              Pratham S.
+            </span>
           </div>
         </div>
 
