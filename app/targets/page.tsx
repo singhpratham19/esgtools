@@ -13,6 +13,7 @@ import {
 } from "@/components/platform/dashboards";
 import { StatusBadge } from "@/components/platform/status-badge";
 import { TargetCreateForm } from "@/components/platform/forms";
+import { ExportCsvButton, JumpToButton, RefreshButton } from "@/components/platform/actions";
 import { listTargets } from "@/lib/db";
 
 export default function TargetsPage() {
@@ -182,10 +183,23 @@ export default function TargetsPage() {
         <h3>Target Register</h3>
         <span className="section-band-note">{targets.length} governed targets · {onTrackTargets} on track</span>
         <div className="section-band-actions">
-          <button className="toolbar-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14" /></svg>
-            New target
-          </button>
+          <JumpToButton targetId="new-target" label="New target" className="btn primary" />
+          <ExportCsvButton
+            data={targets.map((t) => ({
+              id: t.id,
+              title: t.title,
+              pillar: t.pillar,
+              baseline: t.baseline,
+              target: t.target,
+              targetYear: t.targetYear,
+              owner: t.owner,
+              status: t.status,
+            }))}
+            filename="targets-register"
+            label="Export CSV"
+            className="btn"
+          />
+          <RefreshButton className="btn" />
         </div>
       </div>
 
@@ -235,7 +249,7 @@ export default function TargetsPage() {
             subtitle="Program-level milestones and governance."
             entries={activities}
           />
-          <TargetCreateForm />
+          <div id="new-target"><TargetCreateForm /></div>
         </div>
       </section>
     </AppShell>

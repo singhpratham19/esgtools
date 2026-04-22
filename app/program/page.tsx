@@ -15,6 +15,7 @@ import {
 } from "@/components/platform/dashboards";
 import { StatusBadge } from "@/components/platform/status-badge";
 import { MetricCreateForm, WorkbookImportForm } from "@/components/platform/forms";
+import { ExportCsvButton, JumpToButton, RefreshButton } from "@/components/platform/actions";
 import { materialTopics, metricLibrary } from "@/data/esg-data";
 import { formatTonnes } from "@/lib/esg";
 import { listMetrics } from "@/lib/db";
@@ -266,14 +267,26 @@ export default async function ProgramPage() {
         <h3>Emissions Ledger</h3>
         <span className="section-band-note">Current period · {metrics.length} journaled postings</span>
         <div className="section-band-actions">
-          <button className="toolbar-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14" /></svg>
-            New posting
-          </button>
-          <button className="toolbar-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
-            Export CSV
-          </button>
+          <JumpToButton targetId="new-metric" label="New posting" className="btn primary" />
+          <ExportCsvButton
+            data={metrics.map((m) => ({
+              id: m.id,
+              facility: m.facilityId,
+              scope: m.scope,
+              category: m.category,
+              label: m.label,
+              quantity: m.quantity,
+              unit: m.unit,
+              emissionsTonnes: m.emissionsTonnes,
+              factorLabel: m.factorLabel,
+              quality: m.quality,
+              source: m.source,
+            }))}
+            filename="emissions-ledger"
+            label="Export CSV"
+            className="btn"
+          />
+          <RefreshButton className="btn" />
         </div>
       </div>
 
@@ -302,7 +315,7 @@ export default async function ProgramPage() {
                   });
                   const scopeClass = metric.scope === "Scope 1" ? "s1" : metric.scope === "Scope 2" ? "s2" : "s3";
                   return (
-                    <tr key={metric.id}>
+                    <tr key={metric.id} data-search={`${metric.label} ${metric.facilityId} ${metric.scope} ${metric.category}`}>
                       <td>
                         <span className="ledger-code">EM-{String(i + 1).padStart(4, "0")}</span>
                         <div style={{ marginTop: 4 }}>
@@ -343,8 +356,8 @@ export default async function ProgramPage() {
             subtitle="Audit log of data pipeline and governance events."
             entries={activities}
           />
-          <WorkbookImportForm />
-          <MetricCreateForm />
+          <div id="import"><WorkbookImportForm /></div>
+          <div id="new-metric"><MetricCreateForm /></div>
         </div>
       </section>
 

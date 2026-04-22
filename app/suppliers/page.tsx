@@ -13,6 +13,7 @@ import {
 } from "@/components/platform/dashboards";
 import { StatusBadge } from "@/components/platform/status-badge";
 import { SupplierCreateForm } from "@/components/platform/forms";
+import { ExportCsvButton, FilterBar, JumpToButton, RefreshButton } from "@/components/platform/actions";
 import { listSuppliers } from "@/lib/db";
 import { formatTonnes } from "@/lib/esg";
 
@@ -180,16 +181,26 @@ export default function SuppliersPage() {
         <h3>Supplier Register</h3>
         <span className="section-band-note">{suppliers.length} active vendors · sorted by emissions</span>
         <div className="section-band-actions">
-          <button className="toolbar-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 17l6-6 4 4 8-8" /><polyline points="17 7 21 7 21 11" /></svg>
-            Run CDP flow
-          </button>
-          <button className="toolbar-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
-            Export
-          </button>
+          <JumpToButton targetId="new-supplier" label="New supplier" className="btn primary" />
+          <ExportCsvButton
+            data={suppliers.map((s) => ({
+              id: s.id,
+              name: s.name,
+              category: s.category,
+              spendUsd: s.spendUsd,
+              emissionsTonnes: s.emissionsTonnes,
+              responseRate: s.responseRate,
+              risk: s.risk,
+              status: s.status,
+            }))}
+            filename="supplier-register"
+            label="Export CSV"
+            className="btn"
+          />
+          <RefreshButton className="btn" />
         </div>
       </div>
+      <FilterBar placeholder="Search supplier by name or category…" />
 
       <section className="page-grid">
         <div className="page-section span-8">
@@ -215,7 +226,7 @@ export default function SuppliersPage() {
                     return base + Math.sin((seed + k) * 0.65) * base * 0.2 + (k * base * 0.015);
                   });
                   return (
-                    <tr key={supplier.id}>
+                    <tr key={supplier.id} data-search={`${supplier.name} ${supplier.category} ${supplier.risk}`}>
                       <td>
                         <span className="ledger-code">SUP-{String(i + 1).padStart(4, "0")}</span>
                         <div style={{ marginTop: 4 }}>
@@ -246,7 +257,7 @@ export default function SuppliersPage() {
             subtitle="Engagement, onboarding, and risk events."
             entries={activities}
           />
-          <SupplierCreateForm />
+          <div id="new-supplier"><SupplierCreateForm /></div>
         </div>
       </section>
     </AppShell>

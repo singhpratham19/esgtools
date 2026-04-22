@@ -13,6 +13,7 @@ import {
 } from "@/components/platform/dashboards";
 import { StatusBadge } from "@/components/platform/status-badge";
 import { DisclosureCreateForm } from "@/components/platform/forms";
+import { ExportCsvButton, FilterBar, JumpToButton, RefreshButton } from "@/components/platform/actions";
 import { disclosureThemes, governanceRecords, peopleMetrics } from "@/data/esg-data";
 import { listDisclosures } from "@/lib/db";
 
@@ -231,7 +232,26 @@ export default function DisclosuresPage() {
       <div className="section-band">
         <h3>Disclosure Items</h3>
         <span className="section-band-note">{disclosures.length} requirements · {readyDisclosures} ready to publish</span>
+        <div className="section-band-actions">
+          <JumpToButton targetId="new-disclosure" label="New item" className="btn primary" />
+          <ExportCsvButton
+            data={disclosures.map((d) => ({
+              id: d.id,
+              framework: d.framework,
+              code: d.code,
+              title: d.title,
+              value: d.value,
+              source: d.source,
+              status: d.status,
+            }))}
+            filename="disclosure-items"
+            label="Export CSV"
+            className="btn"
+          />
+          <RefreshButton className="btn" />
+        </div>
       </div>
+      <FilterBar placeholder="Search disclosure code, framework or title…" />
 
       <section className="page-grid">
         <div className="page-section span-8">
@@ -247,7 +267,7 @@ export default function DisclosuresPage() {
               </thead>
               <tbody>
                 {disclosures.map((item, i) => (
-                  <tr key={item.id}>
+                  <tr key={item.id} data-search={`${item.code} ${item.framework} ${item.title}`}>
                     <td><span className="ledger-code">{item.code || `DR-${String(i + 1).padStart(4, "0")}`}</span></td>
                     <td><strong>{item.framework}</strong></td>
                     <td>
@@ -266,7 +286,7 @@ export default function DisclosuresPage() {
             subtitle="Drafts, approvals, and evidence events."
             entries={activities}
           />
-          <DisclosureCreateForm />
+          <div id="new-disclosure"><DisclosureCreateForm /></div>
         </div>
       </section>
 

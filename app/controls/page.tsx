@@ -15,6 +15,7 @@ import {
 } from "@/components/platform/dashboards";
 import { StatusBadge } from "@/components/platform/status-badge";
 import { EvidenceUploadForm, TaskCreateForm } from "@/components/platform/forms";
+import { ExportCsvButton, FilterBar, JumpToButton, QuickUpdateButton, RefreshButton } from "@/components/platform/actions";
 import { listEvidence, listTasks } from "@/lib/db";
 
 export default function ControlsPage() {
@@ -215,12 +216,27 @@ export default function ControlsPage() {
         <h3>Evidence Register</h3>
         <span className="section-band-note">{evidence.length} proof records · {verifiedEvidence} verified</span>
         <div className="section-band-actions">
-          <button className="toolbar-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
-            Upload
-          </button>
+          <JumpToButton targetId="upload-evidence" label="Upload evidence" className="btn primary" />
+          <ExportCsvButton
+            data={evidence.map((e) => ({
+              proofId: e.proofId,
+              facility: e.facilityId,
+              documentName: e.documentName,
+              metric: e.metric,
+              owner: e.owner,
+              reviewer: e.reviewer,
+              uploadedAt: e.uploadedAt,
+              documentType: e.documentType,
+              status: e.status,
+            }))}
+            filename="evidence-register"
+            label="Export CSV"
+            className="btn"
+          />
+          <RefreshButton className="btn" />
         </div>
       </div>
+      <FilterBar placeholder="Search proof id, document or metric…" />
 
       <section className="page-grid">
         <div className="page-section span-8">
@@ -240,7 +256,7 @@ export default function ControlsPage() {
                   const seed = (i * 23) % 100;
                   const trend = Array.from({ length: 8 }, (_, k) => 30 + k * 5 + Math.sin((seed + k) * 0.6) * 8);
                   return (
-                    <tr key={item.proofId}>
+                    <tr key={item.proofId} data-search={`${item.proofId} ${item.documentName} ${item.metric}`}>
                       <td><span className="ledger-code">{item.proofId}</span></td>
                       <td>
                         <strong>{item.documentName}</strong>
@@ -262,15 +278,33 @@ export default function ControlsPage() {
             subtitle="Control execution and governance events."
             entries={activities}
           />
-          <EvidenceUploadForm />
-          <TaskCreateForm />
+          <div id="upload-evidence"><EvidenceUploadForm /></div>
+          <div id="new-task"><TaskCreateForm /></div>
         </div>
       </section>
 
       <div className="section-band">
         <h3>Control Tasks</h3>
         <span className="section-band-note">{tasks.length} actions across all priorities</span>
+        <div className="section-band-actions">
+          <JumpToButton targetId="new-task" label="New task" className="btn primary" />
+          <ExportCsvButton
+            data={tasks.map((t) => ({
+              id: t.id,
+              title: t.title,
+              assignee: t.assignee,
+              dueDate: t.dueDate,
+              status: t.status,
+              priority: t.priority,
+              framework: t.framework,
+            }))}
+            filename="control-tasks"
+            label="Export CSV"
+            className="btn"
+          />
+        </div>
       </div>
+      <FilterBar placeholder="Search task, assignee, framework…" />
 
       <section className="page-grid">
         <div className="page-section span-12">
@@ -285,11 +319,12 @@ export default function ControlsPage() {
                   <th>Priority</th>
                   <th>Framework</th>
                   <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {tasks.map((task, i) => (
-                  <tr key={task.id}>
+                  <tr key={task.id} data-search={`${task.title} ${task.assignee} ${task.framework} ${task.priority}`}>
                     <td><span className="ledger-code">CT-{String(i + 1).padStart(4, "0")}</span></td>
                     <td>
                       <Link className="entity-link" href={`/controls/tasks/${task.id}`}>{task.title}</Link>
@@ -299,6 +334,19 @@ export default function ControlsPage() {
                     <td><span className="pill">{task.priority}</span></td>
                     <td><span className="pill">{task.framework}</span></td>
                     <td><StatusBadge status={task.status} /></td>
+                    <td>
+                      {task.status !== "Done" ? (
+                        <QuickUpdateButton
+                          endpoint={`/api/tasks/${task.id}`}
+                          body={{ ...task, status: "Done" }}
+                          label="Mark done"
+                          confirmLabel="done"
+                          icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
+                        />
+                      ) : (
+                        <span className="status-chip ok">Done</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
