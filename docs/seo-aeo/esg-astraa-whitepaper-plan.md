@@ -37,6 +37,8 @@ What this means:
 
 ## Where ESG Astraa stands today
 
+> **Correction (2 Oct 2026):** Search Console data supersedes the "only three URLs indexed" finding below. Google showed **162 esgastraa.com URLs** between 16 Jun and 29 Sep 2026, including about 120 blog posts, 13 white papers and 27 service pages. Non-brand clicks are still near zero. See [`gsc-analysis-2026-10-02.md`](./gsc-analysis-2026-10-02.md), which also maps the P1 papers onto existing pages that already rank.
+
 - **What it is:** an India-focused hybrid of ESG advisory and a "Smart ESG Platform" (esgastraa.com).
   - The site claims 1,000+ KPIs, coverage of BRSR, GRI, SASB, TCFD, ESRS/CSRD and CDP, and a "70% faster BRSR".
   - The product docs on GitHub are sharper: *"collect activity data once, serve BRSR, GHG inventories, CBAM and CCTS from one store"*, *"Astraa does the work; the human approves it; the trail shows it"*, and the go-to-market rule *"Sell CBAM first"*.
